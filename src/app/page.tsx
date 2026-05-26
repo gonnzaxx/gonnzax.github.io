@@ -10,10 +10,14 @@ import { TechStack } from "@/components/sections/tech-stack";
 import { Certifications } from "@/components/sections/certifications";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/footer";
+import { CursorFollower } from "@/components/cursor-follower";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
 export default function Home() {
   return (
     <LanguageProvider>
+      <CursorFollower />
+      <ScrollToTop />
       <Navbar />
       <main>
         <Hero />

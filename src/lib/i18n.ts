@@ -31,6 +31,11 @@ export const translations = {
         tech: "Tecnologías",
         exp: "Experiencia",
       },
+      languages: "Idiomas",
+      languageList: [
+        { name: "Español", level: "Nativo" },
+        { name: "Inglés", level: "B2" },
+      ],
     },
     experience: {
       title: "Experiencia",
@@ -163,6 +168,11 @@ export const translations = {
         tech: "Technologies",
         exp: "Experience",
       },
+      languages: "Languages",
+      languageList: [
+        { name: "Spanish", level: "Native" },
+        { name: "English", level: "B2" },
+      ],
     },
     experience: {
       title: "Experience",

@@ -120,6 +120,34 @@ export function About() {
               </SpotlightCard>
             </motion.div>
 
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.35 }}
+            >
+              <SpotlightCard className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent-light">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-text-primary">{t.about.languages}</h4>
+                  <div className="flex flex-wrap gap-3 mt-2">
+                    {t.about.languageList.map((lang) => (
+                      <div key={lang.name} className="flex items-center gap-2">
+                        <span className="text-sm text-text-secondary">{lang.name}</span>
+                        <span className="px-2 py-0.5 text-xs font-mono font-semibold text-accent-light bg-accent/10 rounded-full border border-accent/20">
+                          {lang.level}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </SpotlightCard>
+            </motion.div>
+
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {stats.map((stat, i) => {
                 const Icon = statIcons[i];
