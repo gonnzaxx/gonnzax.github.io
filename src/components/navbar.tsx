@@ -69,20 +69,7 @@ export function Navbar() {
             : "bg-transparent"
         }`}
       >
-        <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
-          <motion.a
-            href="#hero"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick("#hero");
-            }}
-            className="text-xl font-bold tracking-tight"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <span className="text-gradient">GSA</span>
-          </motion.a>
-
+        <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-center">
           <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
               <button
@@ -119,7 +106,7 @@ export function Navbar() {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden relative w-8 h-8 flex flex-col items-center justify-center gap-1.5"
+            className="md:hidden absolute right-6 w-8 h-8 flex flex-col items-center justify-center gap-1.5"
             aria-label="Menu"
           >
             <motion.span

@@ -40,7 +40,7 @@ function ImageCarousel() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-6 py-10 lg:py-16">
+    <div className="flex flex-col items-center gap-4 py-6 lg:py-8">
       <PhoneMockup>
         <AnimatePresence mode="wait">
           <motion.img
@@ -102,14 +102,12 @@ function ImageCarousel() {
 }
 
 export function Projects() {
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
 
   const project = t.projects.items[0];
 
-  const detailsLabel = locale === "es"
-    ? (selectedProject === 0 ? "Cerrar detalles" : "Ver detalles")
-    : (selectedProject === 0 ? "Close details" : "View details");
+  const detailsLabel = selectedProject === 0 ? t.projects.closeDetails : t.projects.details;
 
   return (
     <section id="projects" className="relative py-32 px-6">
@@ -205,7 +203,7 @@ export function Projects() {
                       <svg className="w-5 h-5 text-accent-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17l-5.384 3.175 1.42-5.997L2.3 7.674l6.146-.44L11.42 1.5l2.975 5.734 6.146.44-5.155 4.674 1.42 5.997z" />
                       </svg>
-                      Challenges
+                      {t.projects.challenges}
                     </h4>
                     <ul className="space-y-3">
                       {project.challenges.map((challenge) => (
@@ -222,7 +220,7 @@ export function Projects() {
                       <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      Results
+                      {t.projects.results}
                     </h4>
                     <ul className="space-y-3">
                       {project.results.map((result) => (
@@ -236,7 +234,7 @@ export function Projects() {
 
                   <div className="md:col-span-2">
                     <h4 className="text-lg font-bold text-text-primary mb-3">
-                      {locale === "es" ? "Arquitectura" : "Architecture"}
+                      {t.projects.architecture}
                     </h4>
                     <p className="text-sm text-text-secondary leading-relaxed">
                       {project.longDescription}

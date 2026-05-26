@@ -12,7 +12,7 @@ export const translations = {
     },
     hero: {
       greeting: "Hola, soy",
-      role: "Junior Full Stack Developer",
+      role: "Junior Software Developer",
       description:
         "Desarrollador en formación con experiencia en soporte IT y rápida adaptación a entornos técnicos. Especializado en Java y bases de datos SQL/NoSQL. Apasionado por la IA y sus aplicaciones.",
       cta: "Ver proyectos",
@@ -56,6 +56,11 @@ export const translations = {
     projects: {
       title: "Proyectos",
       subtitle: "Lo que he construido",
+      challenges: "Retos",
+      results: "Resultados",
+      architecture: "Arquitectura",
+      details: "Ver detalles",
+      closeDetails: "Cerrar detalles",
       items: [
         {
           title: "IES Luis Vives App",
@@ -139,7 +144,7 @@ export const translations = {
     },
     hero: {
       greeting: "Hi, I'm",
-      role: "Junior Full Stack Developer",
+      role: "Junior Software Developer",
       description:
         "Developer in training with experience in IT support and quick adaptation to technical environments. Specialized in Java and SQL/NoSQL databases. Passionate about AI and its applications.",
       cta: "View projects",
@@ -183,6 +188,11 @@ export const translations = {
     projects: {
       title: "Projects",
       subtitle: "What I've built",
+      challenges: "Challenges",
+      results: "Results",
+      architecture: "Architecture",
+      details: "View details",
+      closeDetails: "Close details",
       items: [
         {
           title: "IES Luis Vives App",

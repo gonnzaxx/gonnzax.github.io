@@ -89,9 +89,46 @@ body {
   opacity: 1;
 }
 
+.glow-border:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.08), 0 8px 32px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
 .spotlight-card {
   position: relative;
   overflow: hidden;
+}
+
+@keyframes subtle-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.95); }
+}
+
+section:nth-child(even)::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.04) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: subtle-drift 20s ease-in-out infinite;
+}
+
+section:nth-child(odd):not(:first-child)::before {
+  content: "";
+  position: absolute;
+  bottom: -10%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.03) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: subtle-drift 25s ease-in-out infinite reverse;
 }
 
 .spotlight-card::after {
