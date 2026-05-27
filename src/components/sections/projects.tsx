@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { SectionHeading } from "@/components/ui/section-heading";
 
@@ -105,21 +105,20 @@ function ImageCarousel() {
 export function Projects() {
   const { t } = useLanguage();
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const cardY = useTransform(scrollYProgress, [0, 0.5], [80, 0]);
-  const cardOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   const project = t.projects.items[0];
   const detailsLabel = selectedProject === 0 ? t.projects.closeDetails : t.projects.details;
 
   return (
-    <section ref={sectionRef} id="projects" className="relative py-32 px-6 section-divider">
+    <section id="projects" className="relative py-32 px-6 section-divider">
       <div className="mx-auto max-w-6xl">
         <SectionHeading title={t.projects.title} subtitle={t.projects.subtitle} />
 
         <motion.div
-          style={{ y: cardY, opacity: cardOpacity }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="group relative rounded-3xl bg-bg-card border border-border overflow-hidden transition-all duration-500 hover:border-accent-purple/30"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-accent-cyan/3 via-transparent to-accent-purple/3 pointer-events-none" />

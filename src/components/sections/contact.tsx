@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { socialLinks } from "@/lib/data";
 
@@ -9,20 +8,10 @@ const basePath = process.env.NODE_ENV === "production" ? "/gonnzax.github.io" : 
 
 export function Contact() {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const bgScale = useTransform(scrollYProgress, [0, 0.5], [0.8, 1]);
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.4], [0, 1]);
-
   return (
-    <section ref={sectionRef} id="contact" className="relative py-32 px-6">
-      <motion.div
-        style={{ scale: bgScale, opacity: bgOpacity }}
-        className="absolute inset-0 pointer-events-none"
-      >
-        <div className="absolute inset-0 bg-gradient-to-t from-accent-purple/8 via-accent-cyan/3 to-transparent" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-accent-cyan/5 blur-[120px]" />
-      </motion.div>
+    <section id="contact" className="relative py-32 px-6">
+      <div className="absolute inset-0 bg-gradient-to-t from-accent-purple/8 via-accent-cyan/3 to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-accent-cyan/5 blur-[120px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-3xl text-center">
         <motion.div

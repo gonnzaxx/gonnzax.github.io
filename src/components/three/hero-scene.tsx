@@ -20,8 +20,8 @@ function AnimatedSphere() {
       <mesh ref={meshRef} scale={2.2}>
         <icosahedronGeometry args={[1, 4]} />
         <MeshDistortMaterial
-          color="#3B82F6"
-          emissive="#1d4ed8"
+          color="#06b6d4"
+          emissive="#8b5cf6"
           emissiveIntensity={0.3}
           roughness={0.2}
           metalness={0.8}
@@ -65,7 +65,7 @@ function Particles() {
       </bufferGeometry>
       <pointsMaterial
         size={0.02}
-        color="#60A5FA"
+        color="#22d3ee"
         transparent
         opacity={0.6}
         sizeAttenuation
@@ -84,8 +84,8 @@ export function HeroScene() {
         style={{ background: "transparent" }}
       >
         <ambientLight intensity={0.3} />
-        <directionalLight position={[5, 5, 5]} intensity={0.8} color="#60A5FA" />
-        <pointLight position={[-5, -5, -5]} intensity={0.4} color="#818CF8" />
+        <directionalLight position={[5, 5, 5]} intensity={0.8} color="#22d3ee" />
+        <pointLight position={[-5, -5, -5]} intensity={0.4} color="#a78bfa" />
         <AnimatedSphere />
         <Particles />
       </Canvas>

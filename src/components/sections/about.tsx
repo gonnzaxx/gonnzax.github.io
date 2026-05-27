@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
@@ -83,8 +83,6 @@ const statColors = ["from-accent-cyan to-accent-cyan-light", "from-accent-purple
 export function About() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], [60, -60]);
 
   const stats = [
     { value: "1", label: t.about.stats.projects },
@@ -106,9 +104,8 @@ export function About() {
             transition={{ duration: 0.7 }}
             className="flex flex-col items-center lg:items-start gap-6"
           >
-            <motion.div style={{ y: imgY }} className="relative group">
-              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-accent-cyan via-accent-purple to-accent-pink opacity-50 blur-sm group-hover:opacity-80 transition-opacity duration-500" />
-              <div className="relative w-52 h-52 rounded-2xl overflow-hidden border-2 border-bg-card">
+            <div className="relative group">
+              <div className="relative w-52 h-52 rounded-2xl overflow-hidden border-2 border-border">
                 <img
                   src={`${basePath}/images/avatar.png`}
                   alt="Gonzalo Santiago Ariza"
@@ -117,7 +114,7 @@ export function About() {
                 />
               </div>
               <div className="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 border-4 border-bg-primary shadow-lg shadow-emerald-500/30" />
-            </motion.div>
+            </div>
 
             <div className="text-center lg:text-left">
               <h3 className="text-xl font-bold">Gonzalo Santiago Ariza</h3>

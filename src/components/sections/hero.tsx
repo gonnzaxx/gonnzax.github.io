@@ -1,8 +1,14 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState, useCallback } from "react";
+import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { useLanguage } from "@/lib/language-context";
+
+const HeroScene = dynamic(
+  () => import("@/components/three/hero-scene").then((mod) => mod.HeroScene),
+  { ssr: false }
+);
 
 function Typewriter({ words, speed = 80, pause = 2000 }: { words: string[]; speed?: number; pause?: number }) {
   const [text, setText] = useState("");
@@ -36,82 +42,8 @@ function Typewriter({ words, speed = 80, pause = 2000 }: { words: string[]; spee
   );
 }
 
-function ParallaxOrbs() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -250]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
-  return (
-    <div ref={ref} className="absolute inset-0 overflow-hidden">
-      <motion.div
-        style={{ y: y1, opacity }}
-        className="absolute top-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-accent-cyan/8 blur-[120px]"
-      />
-      <motion.div
-        style={{ y: y2, opacity }}
-        className="absolute top-[20%] right-[10%] w-[600px] h-[600px] rounded-full bg-accent-purple/10 blur-[140px]"
-      />
-      <motion.div
-        style={{ y: y3, opacity }}
-        className="absolute bottom-[10%] left-[40%] w-[400px] h-[400px] rounded-full bg-accent-pink/6 blur-[100px]"
-      />
-    </div>
-  );
-}
-
-function seededRandom(seed: number) {
-  const x = Math.sin(seed * 9301 + 49297) * 49297;
-  return x - Math.floor(x);
-}
-
-function FloatingParticles() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  const particles = useRef(
-    Array.from({ length: 40 }, (_, i) => ({
-      id: i,
-      x: seededRandom(i * 3) * 100,
-      y: seededRandom(i * 3 + 1) * 100,
-      size: seededRandom(i * 3 + 2) * 3 + 1,
-      duration: seededRandom(i * 5) * 20 + 15,
-      delay: seededRandom(i * 7) * 10,
-    }))
-  ).current;
-
-  if (!mounted) return null;
-
-  const colorClasses = ["bg-accent-cyan/40", "bg-accent-purple/40", "bg-accent-pink/30"];
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {particles.map((p) => (
-        <div
-          key={p.id}
-          className={`absolute rounded-full ${colorClasses[p.id % 3]}`}
-          style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: p.size,
-            height: p.size,
-            animation: `float ${p.duration}s ease-in-out ${p.delay}s infinite`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
 export function Hero() {
   const { t, locale } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
 
   const typewriterWords = locale === "es"
     ? ["Software Developer", "Data Enthusiast", "Cloud Explorer", "IA Enthusiast"]
@@ -122,17 +54,19 @@ export function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-bg-primary via-bg-primary to-bg-secondary" />
       <div className="absolute inset-0 grid-pattern opacity-40" />
 
-      <ParallaxOrbs />
-      <FloatingParticles />
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-accent-cyan/8 blur-[120px] animate-[pulse-glow_6s_ease-in-out_infinite]" />
+        <div className="absolute top-[20%] right-[10%] w-[600px] h-[600px] rounded-full bg-accent-purple/10 blur-[140px] animate-[pulse-glow_8s_ease-in-out_infinite_2s]" />
+        <div className="absolute bottom-[10%] left-[40%] w-[400px] h-[400px] rounded-full bg-accent-pink/6 blur-[100px] animate-[pulse-glow_7s_ease-in-out_infinite_1s]" />
+      </div>
 
-      <motion.div
-        style={{ y: textY, opacity: textOpacity, scale }}
-        className="relative z-10 mx-auto max-w-6xl px-6 text-center"
-      >
+      <HeroScene />
+
+      <div className="relative z-10 mx-auto max-w-6xl px-6 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -208,7 +142,7 @@ export function Hero() {
             {t.hero.contact}
           </button>
         </motion.div>
-      </motion.div>
+      </div>
 
       <motion.div
         initial={{ opacity: 0 }}

@@ -1,27 +1,18 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 export function Experience() {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const lineHeight = useTransform(scrollYProgress, [0, 0.5], ["0%", "100%"]);
-
   return (
-    <section ref={sectionRef} id="experience" className="relative py-32 px-6 section-divider">
+    <section id="experience" className="relative py-32 px-6 section-divider">
       <div className="mx-auto max-w-4xl">
         <SectionHeading title={t.experience.title} />
 
         <div className="relative">
-          <div className="absolute left-[19px] top-0 bottom-0 w-px bg-accent-purple/10 md:left-1/2 md:-translate-x-px" />
-          <motion.div
-            style={{ height: lineHeight }}
-            className="absolute left-[19px] top-0 w-px bg-gradient-to-b from-accent-cyan via-accent-purple to-accent-pink md:left-1/2 md:-translate-x-px"
-          />
+          <div className="absolute left-[19px] top-0 bottom-0 w-px bg-gradient-to-b from-accent-cyan/50 via-accent-purple/30 to-transparent md:left-1/2 md:-translate-x-px" />
 
           {t.experience.roles.map((role, i) => (
             <motion.div

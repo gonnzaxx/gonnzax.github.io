@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { techStack } from "@/lib/data";
@@ -46,11 +45,20 @@ const categoryLabelColors = [
   "text-accent-purple-light",
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.06 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20, filter: "blur(6px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+};
+
 export function TechStack() {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const bgY = useTransform(scrollYProgress, [0, 1], [50, -50]);
 
   const categories = Object.entries(techStack).map(([key, items]) => ({
     key,
@@ -59,11 +67,8 @@ export function TechStack() {
   }));
 
   return (
-    <section ref={sectionRef} id="tech" className="relative py-32 px-6 section-divider">
-      <motion.div
-        style={{ y: bgY }}
-        className="absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full bg-accent-pink/4 blur-[120px] pointer-events-none"
-      />
+    <section id="tech" className="relative py-32 px-6 section-divider">
+      <div className="absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full bg-accent-pink/4 blur-[120px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-6xl">
         <SectionHeading title={t.tech.title} />
@@ -72,39 +77,42 @@ export function TechStack() {
           {categories.map((category, catIndex) => (
             <motion.div
               key={category.key}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: catIndex * 0.1 }}
+              transition={{ duration: 0.5, delay: catIndex * 0.08 }}
             >
               <h3 className={`text-sm font-semibold uppercase tracking-[0.2em] mb-6 ${categoryLabelColors[catIndex]}`}>
                 {category.label}
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {category.items.map((tech, i) => (
+              <motion.div
+                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-40px" }}
+              >
+                {category.items.map((tech) => (
                   <motion.div
                     key={tech.name}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: catIndex * 0.1 + i * 0.05 }}
-                    whileHover={{ y: -6, scale: 1.08 }}
-                    className={`group flex flex-col items-center gap-3 rounded-2xl bg-bg-card border border-border p-4 transition-all duration-300 hover:bg-bg-card-hover hover:shadow-xl ${categoryAccents[catIndex]}`}
+                    variants={itemVariants}
+                    whileHover={{ y: -6, scale: 1.08, transition: { duration: 0.15 } }}
+                    className={`group flex flex-col items-center gap-3 rounded-2xl bg-bg-card border border-border p-4 transition-[background,box-shadow,border-color] duration-150 hover:bg-bg-card-hover hover:shadow-xl ${categoryAccents[catIndex]}`}
                   >
                     <div className="w-10 h-10 flex items-center justify-center">
                       <img
                         src={techIcons[tech.icon]}
                         alt={tech.name}
-                        className="w-8 h-8 object-contain transition-all duration-300 [filter:brightness(0)_invert(1)_opacity(0.5)] group-hover:[filter:none] group-hover:scale-110"
+                        className="w-8 h-8 object-contain transition-all duration-150 [filter:brightness(0)_invert(1)_opacity(0.5)] group-hover:[filter:none] group-hover:scale-110"
                         loading="lazy"
                       />
                     </div>
-                    <span className="text-xs font-medium text-text-secondary group-hover:text-text-primary transition-colors text-center">
+                    <span className="text-xs font-medium text-text-secondary group-hover:text-text-primary transition-colors duration-150 text-center">
                       {tech.name}
                     </span>
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>
