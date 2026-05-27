@@ -1,11 +1,49 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 const basePath = process.env.NODE_ENV === "production" ? "/gonnzax.github.io" : "";
+
+function AnimatedCounter({ value, suffix = "" }: { value: string; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const [display, setDisplay] = useState("0");
+  const numericValue = parseInt(value.replace(/\D/g, ""), 10);
+  const hasPlus = value.includes("+");
+
+  useEffect(() => {
+    if (!isInView) return;
+    if (isNaN(numericValue)) {
+      setDisplay(value);
+      return;
+    }
+
+    let start = 0;
+    const duration = 1500;
+    const startTime = performance.now();
+
+    function animate(now: number) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      start = Math.floor(eased * numericValue);
+      setDisplay(String(start));
+      if (progress < 1) requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  }, [isInView, numericValue, value]);
+
+  return (
+    <span ref={ref}>
+      {display}{hasPlus ? "+" : ""}{suffix}
+    </span>
+  );
+}
 
 function CodeIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
@@ -40,9 +78,13 @@ function BriefcaseIcon({ className = "w-5 h-5" }: { className?: string }) {
 }
 
 const statIcons = [CodeIcon, TrophyIcon, BoltIcon, BriefcaseIcon];
+const statColors = ["from-accent-cyan to-accent-cyan-light", "from-accent-purple to-accent-purple-light", "from-accent-pink to-accent-pink-light", "from-accent-cyan to-accent-purple"];
 
 export function About() {
   const { t } = useLanguage();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const imgY = useTransform(scrollYProgress, [0, 1], [60, -60]);
 
   const stats = [
     { value: "1", label: t.about.stats.projects },
@@ -52,35 +94,36 @@ export function About() {
   ];
 
   return (
-    <section id="about" className="relative py-32 px-6">
+    <section ref={sectionRef} id="about" className="relative py-32 px-6 section-divider">
       <div className="mx-auto max-w-6xl">
         <SectionHeading title={t.about.title} />
 
-        <div className="grid gap-12 lg:grid-cols-[1fr_2fr] items-start">
+        <div className="grid gap-16 lg:grid-cols-[1fr_2fr] items-start">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7 }}
             className="flex flex-col items-center lg:items-start gap-6"
           >
-            <div className="relative">
-              <div className="w-48 h-48 rounded-2xl overflow-hidden border-2 border-border bg-bg-card">
+            <motion.div style={{ y: imgY }} className="relative group">
+              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-accent-cyan via-accent-purple to-accent-pink opacity-50 blur-sm group-hover:opacity-80 transition-opacity duration-500" />
+              <div className="relative w-52 h-52 rounded-2xl overflow-hidden border-2 border-bg-card">
                 <img
                   src={`${basePath}/images/avatar.png`}
                   alt="Gonzalo Santiago Ariza"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
               </div>
-              <div className="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 border-4 border-bg-primary" />
-            </div>
+              <div className="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 border-4 border-bg-primary shadow-lg shadow-emerald-500/30" />
+            </motion.div>
 
             <div className="text-center lg:text-left">
               <h3 className="text-xl font-bold">Gonzalo Santiago Ariza</h3>
-              <p className="text-accent-light font-mono text-sm mt-1">{t.hero.role}</p>
+              <p className="text-accent-cyan-light font-mono text-sm mt-1">{t.hero.role}</p>
               <div className="flex items-center gap-2 mt-2 text-text-secondary text-sm">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <svg className="w-4 h-4 text-accent-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                 </svg>
@@ -108,7 +151,7 @@ export function About() {
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               <SpotlightCard className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent-light">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-accent-purple/20 to-accent-cyan/20 flex items-center justify-center text-accent-purple-light">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" />
                   </svg>
@@ -127,7 +170,7 @@ export function About() {
               transition={{ duration: 0.6, delay: 0.35 }}
             >
               <SpotlightCard className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent-light">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-accent-cyan/20 to-accent-pink/20 flex items-center justify-center text-accent-cyan-light">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802" />
                   </svg>
@@ -138,7 +181,7 @@ export function About() {
                     {t.about.languageList.map((lang) => (
                       <div key={lang.name} className="flex items-center gap-2">
                         <span className="text-sm text-text-secondary">{lang.name}</span>
-                        <span className="px-2 py-0.5 text-xs font-mono font-semibold text-accent-light bg-accent/10 rounded-full border border-accent/20">
+                        <span className="px-2.5 py-0.5 text-xs font-mono font-semibold text-accent-cyan-light bg-accent-cyan/10 rounded-full border border-accent-cyan/20">
                           {lang.level}
                         </span>
                       </div>
@@ -151,21 +194,26 @@ export function About() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {stats.map((stat, i) => {
                 const Icon = statIcons[i];
+                const gradient = statColors[i];
                 return (
                   <motion.div
                     key={stat.label}
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: 0.4 + i * 0.1 }}
-                    whileHover={{ y: -4, scale: 1.03 }}
-                    className="text-center p-4 rounded-xl bg-bg-card border border-border transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
+                    transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
+                    whileHover={{ y: -6, scale: 1.05 }}
+                    className="text-center p-5 rounded-2xl bg-bg-card border border-border transition-all duration-300 hover:border-accent-purple/30 hover:shadow-lg hover:shadow-accent-purple/5"
                   >
-                    <div className="w-8 h-8 mx-auto rounded-lg bg-accent/10 flex items-center justify-center text-accent-light mb-2">
-                      <Icon className="w-4 h-4" />
+                    <div className={`w-10 h-10 mx-auto rounded-xl bg-gradient-to-br ${gradient} p-[1px] mb-3`}>
+                      <div className="w-full h-full rounded-xl bg-bg-card flex items-center justify-center">
+                        <Icon className="w-4 h-4 text-accent-cyan-light" />
+                      </div>
                     </div>
-                    <div className="text-2xl font-bold text-gradient">{stat.value}</div>
-                    <div className="text-xs text-text-muted mt-1">{stat.label}</div>
+                    <div className="text-3xl font-extrabold text-gradient">
+                      <AnimatedCounter value={stat.value} />
+                    </div>
+                    <div className="text-xs text-text-muted mt-1 font-medium uppercase tracking-wider">{stat.label}</div>
                   </motion.div>
                 );
               })}

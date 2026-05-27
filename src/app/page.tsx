@@ -16,6 +16,7 @@ import { ScrollToTop } from "@/components/scroll-to-top";
 export default function Home() {
   return (
     <LanguageProvider>
+      <div className="noise-overlay" />
       <CursorFollower />
       <ScrollToTop />
       <Navbar />

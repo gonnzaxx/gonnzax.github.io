@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { techStack } from "@/lib/data";
@@ -29,8 +30,27 @@ const techIcons: Record<string, string> = {
   docker: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
 };
 
+const categoryAccents = [
+  "hover:border-accent-cyan/40 hover:shadow-accent-cyan/10",
+  "hover:border-accent-purple/40 hover:shadow-accent-purple/10",
+  "hover:border-accent-pink/40 hover:shadow-accent-pink/10",
+  "hover:border-accent-cyan/40 hover:shadow-accent-cyan/10",
+  "hover:border-accent-purple/40 hover:shadow-accent-purple/10",
+];
+
+const categoryLabelColors = [
+  "text-accent-cyan-light",
+  "text-accent-purple-light",
+  "text-accent-pink-light",
+  "text-accent-cyan-light",
+  "text-accent-purple-light",
+];
+
 export function TechStack() {
   const { t } = useLanguage();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], [50, -50]);
 
   const categories = Object.entries(techStack).map(([key, items]) => ({
     key,
@@ -39,8 +59,13 @@ export function TechStack() {
   }));
 
   return (
-    <section id="tech" className="relative py-32 px-6">
-      <div className="mx-auto max-w-6xl">
+    <section ref={sectionRef} id="tech" className="relative py-32 px-6 section-divider">
+      <motion.div
+        style={{ y: bgY }}
+        className="absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full bg-accent-pink/4 blur-[120px] pointer-events-none"
+      />
+
+      <div className="relative mx-auto max-w-6xl">
         <SectionHeading title={t.tech.title} />
 
         <div className="space-y-12">
@@ -52,7 +77,7 @@ export function TechStack() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: catIndex * 0.1 }}
             >
-              <h3 className="text-sm font-semibold uppercase tracking-widest text-text-muted mb-6">
+              <h3 className={`text-sm font-semibold uppercase tracking-[0.2em] mb-6 ${categoryLabelColors[catIndex]}`}>
                 {category.label}
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -63,14 +88,14 @@ export function TechStack() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.3, delay: catIndex * 0.1 + i * 0.05 }}
-                    whileHover={{ y: -4, scale: 1.05 }}
-                    className="group flex flex-col items-center gap-3 rounded-xl bg-bg-card border border-border p-4 transition-all duration-300 hover:border-accent/30 hover:bg-bg-card-hover hover:shadow-lg hover:shadow-accent/5"
+                    whileHover={{ y: -6, scale: 1.08 }}
+                    className={`group flex flex-col items-center gap-3 rounded-2xl bg-bg-card border border-border p-4 transition-all duration-300 hover:bg-bg-card-hover hover:shadow-xl ${categoryAccents[catIndex]}`}
                   >
                     <div className="w-10 h-10 flex items-center justify-center">
                       <img
                         src={techIcons[tech.icon]}
                         alt={tech.name}
-                        className="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-110 [filter:brightness(0)_invert(1)_opacity(0.7)] group-hover:[filter:none]"
+                        className="w-8 h-8 object-contain transition-all duration-300 [filter:brightness(0)_invert(1)_opacity(0.5)] group-hover:[filter:none] group-hover:scale-110"
                         loading="lazy"
                       />
                     </div>

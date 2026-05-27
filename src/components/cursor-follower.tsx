@@ -39,7 +39,7 @@ export function CursorFollower() {
       className="pointer-events-none fixed top-0 left-0 z-[9999] mix-blend-screen"
       style={{ x, y }}
     >
-      <div className="w-8 h-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/30 blur-[2px]" />
+      <div className="w-8 h-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-purple/25 blur-[3px]" />
     </motion.div>
   );
 }

@@ -33,7 +33,7 @@ export function Certifications() {
   const { t } = useLanguage();
 
   return (
-    <section className="relative py-20 px-6">
+    <section className="relative py-20 px-6 section-divider">
       <div className="mx-auto max-w-4xl">
         <SectionHeading title={t.certifications.title} />
 
@@ -48,17 +48,17 @@ export function Certifications() {
             >
               <SpotlightCard className="h-full">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-bg-secondary border border-border flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-purple/10 to-accent-cyan/10 border border-border flex items-center justify-center flex-shrink-0">
                     {issuerLogos[cert.issuer] ?? (
-                      <span className="text-accent-light font-bold text-lg">{cert.issuer[0]}</span>
+                      <span className="text-accent-cyan-light font-bold text-lg">{cert.issuer[0]}</span>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-text-primary">{cert.name}</h3>
-                    <p className="text-sm text-accent-light mt-1">{cert.description}</p>
+                    <p className="text-sm text-accent-purple-light mt-1">{cert.description}</p>
                     <div className="flex items-center gap-2 mt-3">
                       <span className="text-xs text-text-muted">{cert.issuer}</span>
-                      <span className="text-text-muted">·</span>
+                      <span className="text-accent-purple/30">·</span>
                       <span className="text-xs text-text-muted">{cert.year}</span>
                     </div>
                   </div>

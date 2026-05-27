@@ -65,7 +65,7 @@ export function Navbar() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "glass shadow-lg shadow-black/10"
+            ? "glass shadow-lg shadow-black/20"
             : "bg-transparent"
         }`}
       >
@@ -77,14 +77,14 @@ export function Navbar() {
                 onClick={() => handleNavClick(item.href)}
                 className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${
                   activeSection === item.href.slice(1)
-                    ? "text-accent-light"
+                    ? "text-accent-cyan-light"
                     : "text-text-secondary hover:text-text-primary"
                 }`}
               >
                 {activeSection === item.href.slice(1) && (
                   <motion.div
                     layoutId="activeNav"
-                    className="absolute inset-0 rounded-lg bg-accent-glow"
+                    className="absolute inset-0 rounded-lg bg-accent-cyan/10 border border-accent-cyan/20"
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
@@ -92,15 +92,15 @@ export function Navbar() {
               </button>
             ))}
 
-            <div className="ml-4 h-5 w-px bg-border" />
+            <div className="ml-4 h-5 w-px bg-accent-purple/20" />
 
             <button
               onClick={toggleLocale}
-              className="ml-3 flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-text-secondary transition-all duration-300 hover:border-accent hover:text-accent-light"
+              className="ml-3 flex items-center gap-1.5 rounded-full border border-accent-purple/20 px-3 py-1.5 text-xs font-semibold text-text-secondary transition-all duration-300 hover:border-accent-cyan/40 hover:text-accent-cyan-light"
             >
-              <span className={locale === "es" ? "text-accent-light" : ""}>ES</span>
+              <span className={locale === "es" ? "text-accent-cyan-light" : ""}>ES</span>
               <span className="text-text-muted">/</span>
-              <span className={locale === "en" ? "text-accent-light" : ""}>EN</span>
+              <span className={locale === "en" ? "text-accent-cyan-light" : ""}>EN</span>
             </button>
           </div>
 
@@ -111,15 +111,15 @@ export function Navbar() {
           >
             <motion.span
               animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-              className="block w-6 h-0.5 bg-text-primary origin-center transition-colors"
+              className="block w-6 h-0.5 bg-text-primary origin-center"
             />
             <motion.span
               animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-              className="block w-6 h-0.5 bg-text-primary transition-colors"
+              className="block w-6 h-0.5 bg-text-primary"
             />
             <motion.span
               animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-              className="block w-6 h-0.5 bg-text-primary origin-center transition-colors"
+              className="block w-6 h-0.5 bg-text-primary origin-center"
             />
           </button>
         </div>
@@ -142,14 +142,18 @@ export function Navbar() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
                   onClick={() => handleNavClick(item.href)}
-                  className="text-left text-2xl font-semibold py-3 text-text-secondary hover:text-accent-light transition-colors"
+                  className={`text-left text-2xl font-semibold py-3 transition-colors ${
+                    activeSection === item.href.slice(1)
+                      ? "text-gradient"
+                      : "text-text-secondary hover:text-accent-cyan-light"
+                  }`}
                 >
                   {navLabels[item.key]}
                 </motion.button>
               ))}
               <button
                 onClick={toggleLocale}
-                className="mt-4 self-start rounded-lg border border-border px-4 py-2 text-sm font-semibold text-text-secondary"
+                className="mt-4 self-start rounded-full border border-accent-purple/20 px-4 py-2 text-sm font-semibold text-text-secondary hover:text-accent-cyan-light hover:border-accent-cyan/30 transition-colors"
               >
                 {locale === "es" ? "English" : "Español"}
               </button>
